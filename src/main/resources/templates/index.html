@@ -16,11 +16,7 @@
 
         <h3><span class="label label-info col-md-3"><th:block th:text="${@environment.getProperty('twitter.screenName')}">cotoco_japan</th:block>のフォロー</span>
             <span class="glyphicon glyphicon-check col-md-1" th:if="${follow}"></span>
-            <th:block th:if="${#bools.isFalse(follow)}" style="display: none" th:style="''">
-                <span class="glyphicon glyphicon-unchecked col-md-1"></span>
-                <a class="btn btn-primary" href="https://twitter.com/intent/follow?screen_name=cotoco_japan" role="button" target="_blank">フォローする？</a>
-            </th:block>
-
+            <span class="glyphicon glyphicon-unchecked col-md-1" th:if="${#bools.isFalse(follow)}" style="display: none" th:style="''"></span>
         </h3>
 
     </div>
@@ -30,10 +26,7 @@
     <div class="col-md-8">
         <h3><span class="label label-info col-md-3">対象のリツイート</span>
             <span class="glyphicon glyphicon-check col-md-1" th:if="${retweet}"></span>
-            <th:block th:if="${#bools.isFalse(retweet)}" style="display: none" th:style="''">
-                <span class="glyphicon glyphicon-unchecked col-md-1"></span>
-                <span class="label label-primary">リツートは下へ↓↓↓↓</span>
-            </th:block>
+            <span class="glyphicon glyphicon-unchecked col-md-1" th:if="${#bools.isFalse(retweet)}" style="display: none" th:style="''"></span>
         </h3>
     </div>
     <div class="col-md-2"></div>
