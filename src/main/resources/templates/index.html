@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" th:href="@{/images/} + 'favicon.png'" type="image/png" />
+    <link rel="shortcut icon" th:href="@{/images/} + 'favicon.png'" href="../static/images/favicon.png" type="image/png" />
     <!-- Bootstrap -->
-    <link href="../bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet">
+    <link href="../static/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{/bootstrap-3.3.7/css/bootstrap.min.css}" rel="stylesheet">
 </head>
 <body>
 <div class="row">
@@ -16,7 +16,11 @@
 
         <h3><span class="label label-info col-md-3"><th:block th:text="${@environment.getProperty('twitter.screenName')}">cotoco_japan</th:block>のフォロー</span>
             <span class="glyphicon glyphicon-check col-md-1" th:if="${follow}"></span>
-            <span class="glyphicon glyphicon-unchecked col-md-1" th:if="${#bools.isFalse(follow)}" style="display: none" th:style="''"></span>
+            <th:block th:if="${#bools.isFalse(follow)}" style="display: none" th:style="''">
+                <span class="glyphicon glyphicon-unchecked col-md-1"></span>
+                <a class="btn btn-primary" href="https://twitter.com/intent/follow?screen_name=cotoco_japan" role="button" target="_blank">フォローする？</a>
+            </th:block>
+
         </h3>
 
     </div>
@@ -25,13 +29,16 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <h3><span class="label label-info col-md-3">対象のリツイート</span>
-            <span class="glyphicon glyphicon-check col-md-1" th:if="${retweet}"></span>
-            <span class="glyphicon glyphicon-unchecked col-md-1" th:if="${#bools.isFalse(retweet)}" style="display: none" th:style="''"></span>
+            <span class="glyphicon glyphicon-check col-md-1"></span>
+            <th:block th:if="${#bools.isFalse(retweet)}" style="display: none" th:style="''" th:if="${retweet}">
+                <span class="glyphicon glyphicon-unchecked col-md-1"></span>
+                <span class="label label-primary">リツートは下へ↓↓↓↓</span>
+            </th:block>
         </h3>
     </div>
     <div class="col-md-2"></div>
 </div>
-<div class="row">
+<div class="row" id="doRetweet">
     <div class="col-md-2"></div>
     <div class="col-md-8">
         <blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">＼早い者勝ち *。ヾ(｡&gt;ｖ&lt;｡)ﾉﾞ*。／<br>ドミノ・ピザキャンペーン、今月も始まりました！<br>くわしくは画像をクリック！ <a href="https://twitter.com/hashtag/%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%9A%E3%83%BC%E3%83%B3?src=hash">#キャンペーン</a>  <a href="https://twitter.com/hashtag/%E3%83%89%E3%83%9F%E3%83%8E%E3%83%BB%E3%83%94%E3%82%B6?src=hash">#ドミノ・ピザ</a><a href="https://t.co/pH5U0kXsCk">https://t.co/pH5U0kXsCk</a></p>&mdash; cotoco@ソーシャルギフト【公式】 (@cotoco_japan) <a href="https://twitter.com/cotoco_japan/status/888232068970233856">2017年7月21日</a></blockquote>
@@ -42,6 +49,6 @@
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="../bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
+<script src="../static/bootstrap-3.3.7/js/bootstrap.min.js" th:src="@{/bootstrap-3.3.7/js/bootstrap.min.js}"></script>
 </body>
 </html>
