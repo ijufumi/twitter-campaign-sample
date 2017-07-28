@@ -14,7 +14,7 @@
     <div class="col-md-8">
         <div class="page-header"><h2>Twitterキャンペーンサンプル</h2></div>
 
-        <h3><span class="label label-info col-md-3"><th:block th:text="${@environment.getProperty('twitter.screenName')}">cotoco_japan</th:block>のフォロー</span>
+        <h3><span class="label label-info col-md-4"><th:block th:text="${@environment.getProperty('twitter.screenName')}">cotoco_japan</th:block>のフォロー</span>
             <span class="glyphicon glyphicon-check col-md-1" th:if="${follow}"></span>
             <span class="glyphicon glyphicon-unchecked col-md-1" th:if="${#bools.isFalse(follow)}" style="display: none" th:style="''"></span>
         </h3>
@@ -24,7 +24,7 @@
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-        <h3><span class="label label-info col-md-3">対象のリツイート</span>
+        <h3><span class="label label-info col-md-4">対象のリツイート</span>
             <span class="glyphicon glyphicon-check col-md-1" th:if="${retweet}"></span>
             <span class="glyphicon glyphicon-unchecked col-md-1" th:if="${#bools.isFalse(retweet)}" style="display: none" th:style="''"></span>
         </h3>
