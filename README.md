@@ -6,7 +6,7 @@
 * 対象のツイートをリツートしている
 
 主に使っているのは以下の通り
-* Spring Boot 
+* Spring Boot (Spring Social Twitter, Thymeleaf)
 * Twitter4J
 
 また、実行するには以下の情報をプロパティファイル（`src/main/resources/application.properties`）か<br>
