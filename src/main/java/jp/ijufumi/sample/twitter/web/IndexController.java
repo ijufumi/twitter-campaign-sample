@@ -46,8 +46,8 @@ public class IndexController {
         return "index";
     }
 
-    @ExceptionHandler(UncheckedTwitterException.class)
-    public String exceptionHandle(UncheckedTwitterException e) {
+    @ExceptionHandler({UncheckedTwitterException.class, NullPointerException.class})
+    public String exceptionHandle(RuntimeException e) {
         logger.error(e.getLocalizedMessage(), e);
 
         return "index";
