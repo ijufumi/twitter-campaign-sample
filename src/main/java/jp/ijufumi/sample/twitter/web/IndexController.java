@@ -1,10 +1,11 @@
 package jp.ijufumi.sample.twitter.web;
 
+import jp.ijufumi.sample.twitter.exception.UncheckedTwitterException;
 import jp.ijufumi.sample.twitter.service.TwitterService;
 import org.slf4j.Logger;
-import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.inject.Inject;
@@ -13,26 +14,24 @@ import javax.inject.Inject;
 @RequestMapping("/")
 public class IndexController {
 
-    private final Twitter twitter;
     private final TwitterService twitterService;
     private final Logger logger;
 
     @Inject
-    public IndexController(Twitter twitter,
-                           TwitterService twitterService,
+    public IndexController(TwitterService twitterService,
                            Logger logger) {
-        this.twitter = twitter;
         this.twitterService = twitterService;
         this.logger = logger;
     }
 
     @RequestMapping
     public String index(Model model) {
-        if (twitterService.twitter() == null) {
+        // Twitterのコネクションが取れない場合はSpring Social Twitterの機能を呼び出す
+        if (!twitterService.isConnected()) {
             return "redirect:/connect/twitter";
         }
 
-        String screenName = twitter.userOperations().getScreenName();
+        String screenName = twitterService.getScreenName();
         boolean isFollowed = twitterService.checkFollowed(screenName);
 
         logger.info("followed by {} is {}.", screenName, isFollowed);
@@ -44,6 +43,13 @@ public class IndexController {
         logger.info("retweeted by {} is {}.", screenName, isRetweeted);
 
         model.addAttribute("retweet", isRetweeted);
+        return "index";
+    }
+
+    @ExceptionHandler(UncheckedTwitterException.class)
+    public String exceptionHandle(UncheckedTwitterException e) {
+        logger.error(e.getLocalizedMessage(), e);
+
         return "index";
     }
 }

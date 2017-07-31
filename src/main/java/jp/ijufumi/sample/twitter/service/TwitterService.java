@@ -22,21 +22,36 @@ import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.PropertyConfiguration;
 
-import javax.annotation.PostConstruct;
 import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * Twitterアクセス用のサービスクラス。
+ */
 @Service
 @Scope(BeanDefinition.SCOPE_SINGLETON)
 public class TwitterService {
 
+    /**
+     * Twitter4J用のFactoryクラス
+     */
     final TwitterFactory twitterFactory;
+    /**
+     * Spring Social Twitter用のコネクションリポジトリクラス
+     */
     final ConnectionRepository connectionRepository;
-
+    /**
+     * フォローされているかをチェックするユーザのスクリーン名
+     */
     final String screenName;
+    /**
+     * リツイートの有無をチェックするツイートのID
+     */
     final long tweetId;
 
+    /** Logger */
     final Logger logger;
+
     @Autowired
     public TwitterService(@Value("${spring.social.twitter.appId}") String appId,
                           @Value("${spring.social.twitter.appSecret}") String secret,
@@ -45,21 +60,30 @@ public class TwitterService {
                           Logger logger,
                           ConnectionRepository connectionRepository) {
 
-        this.screenName = screenName;
-        this.tweetId = tweetId;
-
         Properties properties = new Properties();
         properties.put("oauth.consumerKey", appId);
         properties.put("oauth.consumerSecret", secret);
-
         PropertyConfiguration configuration = new PropertyConfiguration(properties);
 
         logger.info("TwitterConfiguration: {}", ToStringBuilder.reflectionToString(configuration, ToStringStyle.JSON_STYLE));
         twitterFactory = new TwitterFactory(configuration);
+
         this.connectionRepository = connectionRepository;
+
         this.logger = logger;
+
+        this.screenName = screenName;
+        this.tweetId = tweetId;
     }
 
+    /**
+     * 指定したスクリーン名のユーザを、プロパティで設定したスクリーン名のユーザが
+     * フォローしているかをチェックする。<br>
+     * <br>
+     * <b>今回の実装では未使用。</b>
+     * @param targetName フォローされているかをチェックするユーザ
+     * @return 引数のユーザがフォローされていたらtrue、されていなかったらfalse
+     */
     public boolean checkFollowing(String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
@@ -71,6 +95,12 @@ public class TwitterService {
         }
     }
 
+    /**
+     * 指定したスクリーン名のユーザが、プロパティで設定したスクリーン名のユーザに
+     * フォローしているかをチェックする。<br>
+     * @param targetName フォローしているかをチェックするユーザ
+     * @return 引数のユーザがフォローしていたらtrue、していなかったらfalse
+     */
     public boolean checkFollowed(String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
@@ -82,6 +112,15 @@ public class TwitterService {
         }
     }
 
+    /**
+     * 指定したスクリーン名のユーザが、プロパティで設定したツイートを
+     * リツイートしているかチェックする<br>
+     * ただし、タイムラインの最新の1000件しかチェックしていないので、
+     * リツイートしてかなり経っているものはうまく判断されない可能性がある。
+     *
+     * @param targetName リツイートしているかチェックするユーザ
+     * @return 引数のユーザがリツイートしていたらtrue、していなかったらfalse
+     */
     public boolean checkRetweet(String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
@@ -109,7 +148,37 @@ public class TwitterService {
         }
     }
 
+    /**
+     * Twitterへの接続が存在するかチェックする
+     * @return
+     */
+    public boolean isConnected() {
+        return twitter() != null;
+    }
+
+    /**
+     * スクリーン名を取得する
+     *
+     * @return 今アクセスしているユーザのスクリーン名
+     */
+    public String getScreenName() {
+        Twitter twitter = twitter();
+        Objects.requireNonNull(twitter);
+
+        try {
+            return twitter.getScreenName();
+        } catch (TwitterException e) {
+            throw new UncheckedTwitterException(e);
+        }
+    }
+
+    /**
+     * Twitter API呼び出し用にTwitter4JのTwitterインスタンスを生成する
+     *
+     * @return Twitterインスタンス
+     */
     public Twitter twitter() {
+        // アクセストークンを取得するために、Twitterのコネクション情報を取得する
         Connection<org.springframework.social.twitter.api.Twitter> twitterConnection = connectionRepository.findPrimaryConnection(org.springframework.social.twitter.api.Twitter.class);
 
         if (twitterConnection == null) {
@@ -122,10 +191,5 @@ public class TwitterService {
 
         AccessToken token = new AccessToken(connectionData.getAccessToken(), connectionData.getSecret());
         return twitterFactory.getInstance(token);
-    }
-
-    @PostConstruct
-    public void postConstruct() {
-        logger.info("postConstruct() called. {}");
     }
 }

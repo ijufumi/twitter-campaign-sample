@@ -16,6 +16,12 @@ public class Bootstrap {
         SpringApplication.run(Bootstrap.class, args);
     }
 
+    /**
+     * LoggerをDIできるようにするための設定
+     *
+     * @param point
+     * @return
+     */
     @Bean
     @Scope(SCOPE_PROTOTYPE)
     public Logger logger(InjectionPoint point) {
