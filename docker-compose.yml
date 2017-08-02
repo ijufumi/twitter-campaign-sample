@@ -1,0 +1,10 @@
+mysql:
+  build: ./docker/mysql
+  volumes:
+    - "./docker/mysql/initdb:/docker-entrypoint-initdb.d"
+    - db-data:/var/lib/mysql
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+  container_name: campaign-db

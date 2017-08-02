@@ -1,3 +1,5 @@
+use campaign;
+
 CREATE TABLE IF NOT EXISTS campaign_result (
   twitter_id bigint not null PRIMARY KEY,
   prize_status int not null,
