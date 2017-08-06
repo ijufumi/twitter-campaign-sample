@@ -1,8 +1,9 @@
 mysql:
   build: ./docker/mysql
   volumes:
-    - "./docker/mysql/initdb:/docker-entrypoint-initdb.d"
-    - db-data:/var/lib/mysql
+    - "./db:/docker-entrypoint-initdb.d"
+    - ./var/lib/mysql:/var/lib/mysql
+    - ./var/log/mysql:/var/log/mysql
   ports:
     - "3306:3306"
   environment:
