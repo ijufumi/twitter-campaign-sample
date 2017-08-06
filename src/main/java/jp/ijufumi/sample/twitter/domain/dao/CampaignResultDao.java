@@ -5,12 +5,13 @@ import org.seasar.doma.Dao;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.seasar.doma.boot.ConfigAutowireable;
+import org.seasar.doma.jdbc.Result;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Configurable
+@ConfigAutowireable
 @Dao
 public interface CampaignResultDao {
     @Select
@@ -21,9 +22,9 @@ public interface CampaignResultDao {
 
     @Transactional
     @Insert
-    int insert(CampaignResult result);
+    Result<CampaignResult> insert(CampaignResult result);
 
     @Transactional
     @Update
-    int update(CampaignResult result);
+    Result<CampaignResult> update(CampaignResult result);
 }
