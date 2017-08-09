@@ -1,6 +1,8 @@
 SELECT
   /*%expand*/*
 FROM
-  campaign_result
+  t_campaign_result
+WHERE
+  campaign_id = /* campaignId */0
 ORDER BY
   created_at

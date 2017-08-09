@@ -1,11 +1,13 @@
 package jp.ijufumi.sample.twitter.web;
 
 import jp.ijufumi.sample.twitter.exception.UncheckedTwitterException;
+import jp.ijufumi.sample.twitter.service.CampaignService;
 import jp.ijufumi.sample.twitter.service.TwitterService;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.inject.Inject;
@@ -14,12 +16,16 @@ import javax.inject.Inject;
 @RequestMapping("/")
 public class IndexController {
 
-    private final TwitterService twitterService;
-    private final Logger logger;
+    final TwitterService twitterService;
+    final CampaignService campaignService;
+    final Logger logger;
 
     @Inject
-    public IndexController(TwitterService twitterService,
-                           Logger logger) {
+    public IndexController(
+            CampaignService campaignService,
+            TwitterService twitterService,
+            Logger logger) {
+        this.campaignService = campaignService;
         this.twitterService = twitterService;
         this.logger = logger;
     }
@@ -44,6 +50,13 @@ public class IndexController {
 
         model.addAttribute("retweet", isRetweeted);
         return "index";
+    }
+
+    @RequestMapping("campaign/{campaignKey}")
+    public String campaign(Model model, @PathVariable("campaignKey") String campaignKey) {
+
+
+        return "";
     }
 
     @ExceptionHandler({UncheckedTwitterException.class, NullPointerException.class})

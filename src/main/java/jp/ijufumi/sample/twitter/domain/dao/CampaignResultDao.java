@@ -15,10 +15,10 @@ import java.util.List;
 @Dao
 public interface CampaignResultDao {
     @Select
-    List<CampaignResult> selectAll();
+    List<CampaignResult> selectAll(long campaignId);
 
     @Select
-    CampaignResult selectById(long twitterId);
+    CampaignResult selectById(long campaignId, long twitterId);
 
     @Transactional
     @Insert
