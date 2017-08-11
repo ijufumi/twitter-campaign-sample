@@ -10,15 +10,16 @@ import org.seasar.doma.jdbc.Result;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @ConfigAutowireable
 @Dao
 public interface CampaignResultDao {
     @Select
-    List<CampaignResult> selectAll(long campaignId);
+    List<CampaignResult> selectAll(int campaignId);
 
     @Select
-    CampaignResult selectById(long campaignId, long twitterId);
+    Optional<CampaignResult> selectById(int campaignId, long twitterId);
 
     @Transactional
     @Insert

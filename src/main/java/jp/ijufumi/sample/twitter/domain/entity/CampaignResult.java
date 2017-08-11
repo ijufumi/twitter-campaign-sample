@@ -23,4 +23,18 @@ public class CampaignResult {
     String emailAddress;
     String accessKey;
     LocalDateTime createdAt;
+    LocalDateTime updatedAt;
+
+    public CampaignResult copyOf(String emailAddress, LocalDateTime updatedAt) {
+        return new CampaignResult(
+                resultId,
+                campaignId,
+                twitterId,
+                prizeStatus,
+                emailAddress,
+                accessKey,
+                createdAt,
+                updatedAt
+        );
+    }
 }

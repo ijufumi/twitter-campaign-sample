@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS t_campaign (
   template_file VARCHAR(100) NOT NULL,
   valid_start_date DATETIME NOT NULL,
   valid_end_date DATETIME NOT NULL,
-  created_at DATETIME NOT NULL
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL
 );
 
 CREATE INDEX t_campaign_IX1 on t_campaign(campaign_key);
@@ -22,6 +23,7 @@ CREATE TABLE IF NOT EXISTS t_campaign_result (
   email_address VARCHAR(255) NOT NULL,
   access_key VARCHAR(20) NOT NULL,
   created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL,
   FOREIGN KEY (campaign_id) REFERENCES t_campaign(campaign_id)
 );
 

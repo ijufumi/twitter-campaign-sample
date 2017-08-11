@@ -3,10 +3,14 @@ package jp.ijufumi.sample.twitter.domain.dao;
 import jp.ijufumi.sample.twitter.domain.entity.Campaign;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Select;
+import org.seasar.doma.Update;
 import org.seasar.doma.boot.ConfigAutowireable;
+import org.seasar.doma.jdbc.Result;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @ConfigAutowireable
 @Dao
@@ -18,8 +22,15 @@ public interface CampaignDao {
     List<Campaign> selectValidList(LocalDateTime systemDate);
 
     @Select
-    Campaign selectById(long campaignId);
+    Optional<Campaign> selectById(int campaignId);
 
     @Select
-    Campaign selectByCampaignKey(String campaignKey, LocalDateTime systemDate);
+    Optional<Campaign> selectByIdWithLock(int campaignId);
+
+    @Select
+    Optional<Campaign> selectByCampaignKey(String campaignKey, LocalDateTime systemDate);
+
+    @Transactional
+    @Update
+    Result<Campaign> update(Campaign campaign);
 }
