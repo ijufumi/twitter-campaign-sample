@@ -26,3 +26,5 @@ hs_err_pid*
 
 var
 ._var
+
+node_modules
