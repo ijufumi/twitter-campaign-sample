@@ -2,6 +2,9 @@ package jp.ijufumi.sample.twitter;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import jp.ijufumi.sample.twitter.interceptor.TwitterConnectionInterceptor;
+import jp.ijufumi.sample.twitter.service.CampaignService;
+import jp.ijufumi.sample.twitter.service.TwitterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InjectionPoint;
@@ -10,6 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.handler.MappedInterceptor;
 
 import javax.sql.DataSource;
 
@@ -60,5 +65,19 @@ public class Bootstrap {
         config.setConnectionTestQuery(testQuery);
 
         return config;
+    }
+
+    @Bean
+    public HandlerInterceptor twitterConnectionInterceptor(
+            TwitterService twitterService,
+            CampaignService campaignService,
+            Logger logger
+    ) {
+        return new TwitterConnectionInterceptor(twitterService, campaignService, logger);
+    }
+
+    @Bean
+    public MappedInterceptor mappedInterceptor(TwitterConnectionInterceptor twitterConnectionInterceptor) {
+        return new MappedInterceptor(new String[]{"/**"}, twitterConnectionInterceptor);
     }
 }
