@@ -2,6 +2,7 @@ package jp.ijufumi.sample.twitter.domain.entity;
 
 import jp.ijufumi.sample.twitter.domain.value.PrizeStatusObject;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Value;
 import org.seasar.doma.Entity;
 import org.seasar.doma.GeneratedValue;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 
 @Entity(immutable = true)
 @Value
+@Builder
 public class CampaignResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

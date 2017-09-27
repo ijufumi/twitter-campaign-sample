@@ -65,15 +65,16 @@ public class CampaignService {
         Campaign newCampaign = campaign.copyOf(winningCount, campaign.getTotalCount() + 1, LocalDateTime.now());
         campaignDao.update(newCampaign);
 
-        CampaignResult campaignResult = new CampaignResult(
-                -1L,
-                campaignId,
-                twitterId,
-                prizeStatus,
-                "",
-                "",
-                LocalDateTime.now(),
-                LocalDateTime.now());
+        CampaignResult campaignResult = CampaignResult.builder()
+                .resultId(-1L)
+                .campaignId(campaignId)
+                .twitterId(twitterId)
+                .prizeStatus(prizeStatus)
+                .emailAddress("")
+                .accessKey(accessKey)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now()).build();
+
         campaignResultDao.insert(campaignResult);
 
         return prizeStatus;
