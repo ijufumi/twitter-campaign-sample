@@ -1,5 +1,6 @@
 package jp.ijufumi.sample.twitter.web;
 
+import jp.ijufumi.sample.twitter.domain.entity.Campaign;
 import jp.ijufumi.sample.twitter.exception.UncheckedTwitterException;
 import jp.ijufumi.sample.twitter.service.CampaignService;
 import jp.ijufumi.sample.twitter.service.TwitterService;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -32,9 +35,17 @@ public class IndexController {
 
     @RequestMapping
     public String index(Model model) {
-        // Twitterのコネクションが取れない場合はSpring Social Twitterの機能を呼び出す
-        if (!twitterService.isConnected()) {
-            return "redirect:/connect/twitter";
+        List<Campaign> campaignList = campaignService.getCampaignList();
+        model.addAttribute("campaignList", campaignList);
+
+        return "index";
+    }
+
+    @RequestMapping("campaign/{campaignKey}")
+    public String campaign(Model model, @PathVariable("campaignKey") String campaignKey) {
+        Optional<Campaign> campaignOpt = campaignService.getCampaign(campaignKey);
+        if (!campaignOpt.isPresent()) {
+            return "error";
         }
 
         String screenName = twitterService.getScreenName();
@@ -49,14 +60,8 @@ public class IndexController {
         logger.info("retweeted by {} is {}.", screenName, isRetweeted);
 
         model.addAttribute("retweet", isRetweeted);
-        return "index";
-    }
 
-    @RequestMapping("campaign/{campaignKey}")
-    public String campaign(Model model, @PathVariable("campaignKey") String campaignKey) {
-
-
-        return "";
+        return "campaign";
     }
 
     @ExceptionHandler({UncheckedTwitterException.class, NullPointerException.class})
