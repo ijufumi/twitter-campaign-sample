@@ -20,7 +20,7 @@
         <div class="col-md-8">
             <div class="page-header"><h2>Twitterキャンペーンリスト</h2></div>
 
-            <a href="javascript:void(0)" th:href="@{/campaign/} + *{c.campaignKey}"  th:each="c : ${campaignList}">
+            <a href="javascript:void(0)" th:each="c : ${campaignList}" th:href="@{/campaign/} + *{c.campaignKey}" >
                 <div class="panel panel-info campaign-list">
                     <div class="panel-heading campaign-head">
                         <div class="col-md-5" th:text="*{c.campaignName}">
