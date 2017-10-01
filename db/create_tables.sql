@@ -1,18 +1,21 @@
 use campaign;
 
 CREATE TABLE IF NOT EXISTS t_campaign (
-  campaign_id INT NOT NULL PRIMARY KEY,
+  campaign_id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
   campaign_key VARCHAR(100) NOT NULL,
   campaign_name VARCHAR(100) NOT NULL,
   banner_image_path VARCHAR(255) NOT NULL,
   template_file VARCHAR(100) NOT NULL,
   valid_start_date DATETIME NOT NULL,
   valid_end_date DATETIME NOT NULL,
+  winning_rate  INTEGER NOT NULL,
+  winning_count INTEGER NOT NULL,
+  total_count INTEGER NOT NULL,
   created_at DATETIME NOT NULL,
   updated_at DATETIME NOT NULL
 );
 
-CREATE INDEX t_campaign_IX1 on t_campaign(campaign_key);
+CREATE INDEX t_campaign_IX1 on t_campaign(campaign_key) ;
 CREATE INDEX t_campaign_IX2 on t_campaign(valid_start_date, valid_end_date);
 
 CREATE TABLE IF NOT EXISTS t_campaign_result (
