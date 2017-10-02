@@ -2,8 +2,8 @@ package jp.ijufumi.sample.twitter.service;
 
 import jp.ijufumi.sample.twitter.domain.dao.CampaignDao;
 import jp.ijufumi.sample.twitter.domain.dao.CampaignResultDao;
-import jp.ijufumi.sample.twitter.domain.entity.Campaign;
-import jp.ijufumi.sample.twitter.domain.entity.CampaignResult;
+import jp.ijufumi.sample.twitter.domain.entity.TCampaign;
+import jp.ijufumi.sample.twitter.domain.entity.TCampaignResult;
 import jp.ijufumi.sample.twitter.domain.value.PrizeStatusObject;
 import jp.ijufumi.sample.twitter.util.CampaignUtil;
 import org.slf4j.Logger;
@@ -34,25 +34,25 @@ public class CampaignService {
      * キャンペーンのリストを取得する
      * @return
      */
-    public List<Campaign> getCampaignList() {
+    public List<TCampaign> getCampaignList() {
         return campaignDao.selectValidList(LocalDateTime.now());
     }
 
     // キャンペーンを取得する
-    public Optional<Campaign> getCampaign(String campaignKey) {
+    public Optional<TCampaign> getCampaign(String campaignKey) {
         return campaignDao.selectByCampaignKey(campaignKey, LocalDateTime.now());
     }
 
     public PrizeStatusObject drawLots(int campaignId, long twitterId) {
-        Optional<CampaignResult> campaignResultOpt = campaignResultDao.selectById(campaignId, twitterId);
+        Optional<TCampaignResult> campaignResultOpt = campaignResultDao.selectById(campaignId, twitterId);
 
         if (campaignResultOpt.isPresent()) {
             return campaignResultOpt.get().getPrizeStatus();
         }
 
-        Optional<Campaign> campaignOpt = campaignDao.selectByIdWithLock(campaignId);
+        Optional<TCampaign> campaignOpt = campaignDao.selectByIdWithLock(campaignId);
 
-        Campaign campaign = campaignOpt.get();
+        TCampaign campaign = campaignOpt.get();
         PrizeStatusObject prizeStatus = CampaignUtil.drawLots(campaign.getWinningRate(), campaign.getWinningCount(), campaign.getTotalCount());
 
         int winningCount = campaign.getWinningCount();
@@ -62,10 +62,10 @@ public class CampaignService {
             accessKey = CampaignUtil.generateAccessKey();
         }
 
-        Campaign newCampaign = campaign.copyOf(winningCount, campaign.getTotalCount() + 1, LocalDateTime.now());
+        TCampaign newCampaign = campaign.copyOf(winningCount, campaign.getTotalCount() + 1, LocalDateTime.now());
         campaignDao.update(newCampaign);
 
-        CampaignResult campaignResult = CampaignResult.builder()
+        TCampaignResult campaignResult = TCampaignResult.builder()
                 .resultId(-1L)
                 .campaignId(campaignId)
                 .twitterId(twitterId)
@@ -81,17 +81,17 @@ public class CampaignService {
     }
 
     // 結果を取得する
-    public Optional<CampaignResult> getResult(int campaignId, long twitterId) {
-        Optional<CampaignResult> campaignResultOpt = campaignResultDao.selectById(campaignId, twitterId);
+    public Optional<TCampaignResult> getResult(int campaignId, long twitterId) {
+        Optional<TCampaignResult> campaignResultOpt = campaignResultDao.selectById(campaignId, twitterId);
         if (!campaignResultOpt.isPresent()) {
-            logger.info("CampaignResult is not exists.[{}]", twitterId);
+            logger.info("TCampaignResult is not exists.[{}]", twitterId);
             return campaignResultOpt;
         }
 
-        CampaignResult campaignResult = campaignResultOpt.get();
+        TCampaignResult campaignResult = campaignResultOpt.get();
 
         if (campaignResult.getPrizeStatus().equals(PrizeStatusObject.LOSE)) {
-            logger.info("CampaignResult is not win.[{}]", twitterId);
+            logger.info("TCampaignResult is not win.[{}]", twitterId);
             return campaignResultOpt;
         }
 
@@ -100,19 +100,19 @@ public class CampaignService {
 
     // メールアドレスを入力する
     public void updateEmailAddress(int campaignId, long twitterId, String emailAddress) {
-        Optional<CampaignResult> campaignResultOpt = campaignResultDao.selectById(campaignId, twitterId);
+        Optional<TCampaignResult> campaignResultOpt = campaignResultDao.selectById(campaignId, twitterId);
 
         if (!campaignResultOpt.isPresent()) {
-            logger.info("CampaignResult is invalid.[{}]", twitterId);
+            logger.info("TCampaignResult is invalid.[{}]", twitterId);
             return;
         }
-        CampaignResult campaignResult = campaignResultOpt.get();
+        TCampaignResult campaignResult = campaignResultOpt.get();
         if (campaignResult.getPrizeStatus().equals(PrizeStatusObject.LOSE)) {
-            logger.info("CampaignResult is invalid.[{}]", twitterId);
+            logger.info("TCampaignResult is invalid.[{}]", twitterId);
             return;
         }
 
-        CampaignResult newCampaignResult = campaignResult.copyOf(emailAddress, LocalDateTime.now());
+        TCampaignResult newCampaignResult = campaignResult.copyOf(emailAddress, LocalDateTime.now());
         campaignResultDao.update(newCampaignResult);
     }
 

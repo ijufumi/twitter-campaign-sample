@@ -1,6 +1,6 @@
 package jp.ijufumi.sample.twitter.web;
 
-import jp.ijufumi.sample.twitter.domain.entity.Campaign;
+import jp.ijufumi.sample.twitter.domain.entity.TCampaign;
 import jp.ijufumi.sample.twitter.service.CampaignService;
 import jp.ijufumi.sample.twitter.service.TwitterService;
 import jp.ijufumi.sample.twitter.web.common.ControllerBase;
@@ -32,7 +32,7 @@ public class IndexController extends ControllerBase {
      */
     @GetMapping
     public String index(Model model) {
-        List<Campaign> campaignList = campaignService.getCampaignList();
+        List<TCampaign> campaignList = campaignService.getCampaignList();
         model.addAttribute("campaignList", campaignList);
 
         logger.debug("campaignList:{}", campaignList);

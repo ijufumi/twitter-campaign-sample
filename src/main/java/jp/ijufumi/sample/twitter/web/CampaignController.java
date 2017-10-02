@@ -1,6 +1,6 @@
 package jp.ijufumi.sample.twitter.web;
 
-import jp.ijufumi.sample.twitter.domain.entity.Campaign;
+import jp.ijufumi.sample.twitter.domain.entity.TCampaign;
 import jp.ijufumi.sample.twitter.service.CampaignService;
 import jp.ijufumi.sample.twitter.service.TwitterService;
 import jp.ijufumi.sample.twitter.web.common.ControllerBase;
@@ -33,23 +33,12 @@ public class CampaignController extends ControllerBase {
      */
     @RequestMapping("{campaignKey}")
     public String index(Model model, @PathVariable("campaignKey") String campaignKey) {
-        Optional<Campaign> campaignOpt = campaignService.getCampaign(campaignKey);
+        Optional<TCampaign> campaignOpt = campaignService.getCampaign(campaignKey);
         if (!campaignOpt.isPresent()) {
             return "error";
         }
 
-        String screenName = twitterService.getScreenName();
-        boolean isFollowed = twitterService.checkFollowed(screenName);
-
-        logger.info("followed by {} is {}.", screenName, isFollowed);
-
-        model.addAttribute("follow", isFollowed);
-
-        boolean isRetweeted = twitterService.checkRetweet(screenName);
-
-        logger.info("retweeted by {} is {}.", screenName, isRetweeted);
-
-        model.addAttribute("retweet", isRetweeted);
+        model.addAttribute("campaign", campaignOpt.get());
 
         return "campaign";
     }
@@ -58,7 +47,7 @@ public class CampaignController extends ControllerBase {
     public String form(Model model,
                        @PathVariable("campaignKey") String campaignKey
     ) {
-        Optional<Campaign> campaignOpt = campaignService.getCampaign(campaignKey);
+        Optional<TCampaign> campaignOpt = campaignService.getCampaign(campaignKey);
         if (!campaignOpt.isPresent()) {
             return "error";
         }

@@ -8,10 +8,10 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-public class ControllerBase {
-    protected TwitterService twitterService;
-    protected CampaignService campaignService;
-    protected Logger logger;
+public abstract class ControllerBase {
+    protected final TwitterService twitterService;
+    protected final CampaignService campaignService;
+    protected final Logger logger;
 
     protected ControllerBase(
             TwitterService twitterService,
