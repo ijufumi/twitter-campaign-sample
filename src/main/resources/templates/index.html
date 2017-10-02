@@ -11,7 +11,7 @@
     <!-- Bootstrap -->
     <link href="../static/bootstrap-3.3.7/css/bootstrap.min.css" th:href="@{/bootstrap-3.3.7/css/bootstrap.min.css}"
           rel="stylesheet"/>
-    <link href="../static/styles/style.css" rel="stylesheet"/>
+    <link href="../static/styles/style.css" th:href="@{/styles/style.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="container">
@@ -28,9 +28,9 @@
                         </div>
                         <div class="col-md-7">
                             期間：
-                            <time th:text="*{#calendars.format(validStartDate, 'yyyy/MM/dd')}">2017/05/01</time>
+                            <time th:text="*{#temporals.format(c.validStartDate, 'yyyy/MM/dd')}">2017/05/01</time>
                             〜
-                            <time th:text="*{#calendars.format(validEndDate, 'yyyy/MM/dd')}">2017/05/31</time>
+                            <time th:text="*{#temporals.format(c.validEndDate, 'yyyy/MM/dd')}">2017/05/31</time>
                         </div>
                     </div>
                     <div class="panel-body">
