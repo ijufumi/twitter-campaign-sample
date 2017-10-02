@@ -1,20 +1,20 @@
 package jp.ijufumi.sample.twitter.domain.entity;
 
 import jp.ijufumi.sample.twitter.domain.value.PrizeStatusObject;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 import org.seasar.doma.Entity;
 import org.seasar.doma.GeneratedValue;
 import org.seasar.doma.GenerationType;
 import org.seasar.doma.Id;
+import org.seasar.doma.jdbc.entity.NamingType;
 
 import java.time.LocalDateTime;
 
 @Entity(immutable = true)
 @Value
 @Builder
-public class CampaignResult {
+public class TCampaignResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     long resultId;
@@ -27,8 +27,8 @@ public class CampaignResult {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
-    public CampaignResult copyOf(String emailAddress, LocalDateTime updatedAt) {
-        return new CampaignResult(
+    public TCampaignResult copyOf(String emailAddress, LocalDateTime updatedAt) {
+        return new TCampaignResult(
                 resultId,
                 campaignId,
                 twitterId,

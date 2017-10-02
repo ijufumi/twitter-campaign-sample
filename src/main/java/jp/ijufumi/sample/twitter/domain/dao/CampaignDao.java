@@ -1,6 +1,6 @@
 package jp.ijufumi.sample.twitter.domain.dao;
 
-import jp.ijufumi.sample.twitter.domain.entity.Campaign;
+import jp.ijufumi.sample.twitter.domain.entity.TCampaign;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
@@ -16,21 +16,21 @@ import java.util.Optional;
 @Dao
 public interface CampaignDao {
     @Select
-    List<Campaign> selectAll();
+    List<TCampaign> selectAll();
 
     @Select
-    List<Campaign> selectValidList(LocalDateTime systemDate);
+    List<TCampaign> selectValidList(LocalDateTime systemDate);
 
     @Select
-    Optional<Campaign> selectById(int campaignId);
+    Optional<TCampaign> selectById(int campaignId);
 
     @Select
-    Optional<Campaign> selectByIdWithLock(int campaignId);
+    Optional<TCampaign> selectByIdWithLock(int campaignId);
 
     @Select
-    Optional<Campaign> selectByCampaignKey(String campaignKey, LocalDateTime systemDate);
+    Optional<TCampaign> selectByCampaignKey(String campaignKey, LocalDateTime systemDate);
 
     @Transactional
     @Update
-    Result<Campaign> update(Campaign campaign);
+    Result<TCampaign> update(TCampaign campaign);
 }

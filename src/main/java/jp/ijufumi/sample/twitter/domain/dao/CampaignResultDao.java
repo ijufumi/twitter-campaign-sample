@@ -1,6 +1,6 @@
 package jp.ijufumi.sample.twitter.domain.dao;
 
-import jp.ijufumi.sample.twitter.domain.entity.CampaignResult;
+import jp.ijufumi.sample.twitter.domain.entity.TCampaignResult;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
@@ -16,16 +16,16 @@ import java.util.Optional;
 @Dao
 public interface CampaignResultDao {
     @Select
-    List<CampaignResult> selectAll(int campaignId);
+    List<TCampaignResult> selectAll(int campaignId);
 
     @Select
-    Optional<CampaignResult> selectById(int campaignId, long twitterId);
+    Optional<TCampaignResult> selectById(int campaignId, long twitterId);
 
     @Transactional
     @Insert
-    Result<CampaignResult> insert(CampaignResult result);
+    Result<TCampaignResult> insert(TCampaignResult result);
 
     @Transactional
     @Update
-    Result<CampaignResult> update(CampaignResult result);
+    Result<TCampaignResult> update(TCampaignResult result);
 }

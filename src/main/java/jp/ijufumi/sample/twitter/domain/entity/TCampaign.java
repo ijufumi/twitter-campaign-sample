@@ -6,13 +6,14 @@ import org.seasar.doma.Entity;
 import org.seasar.doma.GeneratedValue;
 import org.seasar.doma.GenerationType;
 import org.seasar.doma.Id;
+import org.seasar.doma.jdbc.entity.NamingType;
 
 import java.time.LocalDateTime;
 
 @Entity(immutable = true)
 @Value
 @Builder
-public class Campaign {
+public class TCampaign {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int campaignId;
@@ -29,8 +30,8 @@ public class Campaign {
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
-    public Campaign copyOf(int winningCount, int totalCount, LocalDateTime updatedAt) {
-        return new Campaign(
+    public TCampaign copyOf(int winningCount, int totalCount, LocalDateTime updatedAt) {
+        return new TCampaign(
               campaignId,
               campaignKey,
               campaignName,
