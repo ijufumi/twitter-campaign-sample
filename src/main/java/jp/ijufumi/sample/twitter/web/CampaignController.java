@@ -38,8 +38,9 @@ public class CampaignController extends ControllerBase {
             return "error";
         }
 
-        model.addAttribute("campaign", campaignOpt.get());
-
+        TCampaign campaign = campaignOpt.get();
+        model.addAttribute("campaign", campaign);
+        model.addAttribute("embedHtml", twitterService.getEmbedHTML(campaign.getScreenName(), campaign.getStatusId()));
         return "campaign";
     }
 

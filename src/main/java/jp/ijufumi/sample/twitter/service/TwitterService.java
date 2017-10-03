@@ -173,6 +173,25 @@ public class TwitterService {
     }
 
     /**
+     * キャンペーン画面に表示するための埋め込み用HTMLを取得する
+     *
+     * @return
+     */
+    public String getEmbedHTML(String screenName, long statusId) {
+        Twitter twitter = twitter();
+        Objects.requireNonNull(twitter);
+
+        try {
+            OEmbedRequest request = new OEmbedRequest(0, String.format("https://twitter.com/%s/status/%d", screenName, statusId));
+            OEmbed embed = twitter.tweets().getOEmbed(request);
+            return embed.getHtml();
+        }
+        catch (TwitterException e) {
+            throw new UncheckedTwitterException(e);
+        }
+    }
+
+    /**
      * Twitter API呼び出し用にTwitter4JのTwitterインスタンスを生成する
      *
      * @return Twitterインスタンス

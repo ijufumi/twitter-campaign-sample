@@ -21,7 +21,8 @@ public class TCampaign {
     String campaignKey;
     String campaignName;
     String bannerImagePath;
-    String templateFile;
+    String screenName;
+    long statusId;
     LocalDateTime validStartDate;
     LocalDateTime validEndDate;
     LocalDateTime displayStartDate;
@@ -38,7 +39,8 @@ public class TCampaign {
               campaignKey,
               campaignName,
               bannerImagePath,
-              templateFile,
+              screenName,
+              statusId,
               validStartDate,
               validEndDate,
               displayStartDate,
