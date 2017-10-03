@@ -24,6 +24,8 @@ public class TCampaign {
     String templateFile;
     LocalDateTime validStartDate;
     LocalDateTime validEndDate;
+    LocalDateTime displayStartDate;
+    LocalDateTime displayEndDate;
     int winningRate;
     int winningCount;
     int totalCount;
@@ -39,6 +41,8 @@ public class TCampaign {
               templateFile,
               validStartDate,
               validEndDate,
+              displayStartDate,
+              displayEndDate,
               winningRate,
               winningCount,
               totalCount,

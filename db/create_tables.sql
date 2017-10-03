@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS t_campaign (
   template_file VARCHAR(100) NOT NULL,
   valid_start_date DATETIME NOT NULL,
   valid_end_date DATETIME NOT NULL,
+  display_start_date DATETIME NOT NULL,
+  display_end_date DATETIME NOT NULL,
   winning_rate  INTEGER NOT NULL,
   winning_count INTEGER NOT NULL,
   total_count INTEGER NOT NULL,
