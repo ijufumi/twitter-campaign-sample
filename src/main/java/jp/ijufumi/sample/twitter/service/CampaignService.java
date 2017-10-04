@@ -71,7 +71,6 @@ public class CampaignService {
                 .twitterId(twitterId)
                 .prizeStatus(prizeStatus)
                 .emailAddress("")
-                .accessKey(accessKey)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now()).build();
 

@@ -23,7 +23,6 @@ public class TCampaignResult {
     long twitterId;
     PrizeStatusObject prizeStatus;
     String emailAddress;
-    String accessKey;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
@@ -34,7 +33,6 @@ public class TCampaignResult {
                 twitterId,
                 prizeStatus,
                 emailAddress,
-                accessKey,
                 createdAt,
                 updatedAt
         );
