@@ -70,6 +70,20 @@ public class TwitterService {
     }
 
     /**
+     * TwitterのIDを取得する
+     *
+     * @return
+     */
+    public long getTweetId() {
+        try {
+            return twitter().getId();
+        }
+        catch (TwitterException e) {
+            throw new UncheckedTwitterException(e);
+        }
+    }
+
+    /**
      * 指定したスクリーン名のユーザを、プロパティで設定したスクリーン名のユーザが
      * フォローしているかをチェックする。<br>
      * <br>
