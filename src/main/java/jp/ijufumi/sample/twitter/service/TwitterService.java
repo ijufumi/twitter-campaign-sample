@@ -15,6 +15,7 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import twitter4j.*;
+import twitter4j.api.UsersResources;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.PropertyConfiguration;
 
@@ -77,6 +78,22 @@ public class TwitterService {
     public long getTweetId() {
         try {
             return twitter().getId();
+        }
+        catch (TwitterException e) {
+            throw new UncheckedTwitterException(e);
+        }
+    }
+
+    /**
+     * メールアドレスを取得する
+     *
+     * @return
+     */
+    public String getEmailAddress() {
+        Twitter twitter = twitter();
+        Objects.requireNonNull(twitter);
+        try {
+            return twitter().users().verifyCredentials().getEmail();
         }
         catch (TwitterException e) {
             throw new UncheckedTwitterException(e);
@@ -210,7 +227,7 @@ public class TwitterService {
      *
      * @return Twitterインスタンス
      */
-    public Twitter twitter() {
+    private Twitter twitter() {
         // アクセストークンを取得するために、Twitterのコネクション情報を取得する
         Connection<org.springframework.social.twitter.api.Twitter> twitterConnection = connectionRepository.findPrimaryConnection(org.springframework.social.twitter.api.Twitter.class);
 
