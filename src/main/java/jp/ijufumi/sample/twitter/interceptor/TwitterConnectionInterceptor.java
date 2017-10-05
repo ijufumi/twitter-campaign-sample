@@ -37,7 +37,9 @@ public class TwitterConnectionInterceptor extends HandlerInterceptorAdapter {
 
         // Twitterのコネクションが取れない場合はSpring Social Twitterの機能を呼び出す
         if (!twitterService.isConnected()) {
-            response.addCookie(new Cookie("callbackUrl", requestUri));
+            Cookie cookie = new Cookie("callbackUrl", requestUri);
+            cookie.setPath("/");
+            response.addCookie(cookie);
             response.sendRedirect("/connect/twitter");
             return false;
         }
