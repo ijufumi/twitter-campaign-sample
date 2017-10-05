@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.social.TwitterProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
@@ -27,7 +26,6 @@ import java.util.Properties;
  */
 @Service
 @Scope(BeanDefinition.SCOPE_SINGLETON)
-@ConfigurationProperties("twitter")
 public class TwitterService {
 
     /**
@@ -38,14 +36,6 @@ public class TwitterService {
      * Spring Social Twitter用のコネクションリポジトリクラス
      */
     final ConnectionRepository connectionRepository;
-    /**
-     * フォローされているかをチェックするユーザのスクリーン名
-     */
-    String screenName;
-    /**
-     * リツイートの有無をチェックするツイートのID
-     */
-    long tweetId;
 
     /**
      * Logger
@@ -109,7 +99,7 @@ public class TwitterService {
      * @param targetName フォローされているかをチェックするユーザ
      * @return 引数のユーザがフォローされていたらtrue、されていなかったらfalse
      */
-    public boolean checkFollowing(String targetName) {
+    public boolean checkFollowing(String screenName, String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
 
@@ -128,7 +118,7 @@ public class TwitterService {
      * @param targetName フォローしているかをチェックするユーザ
      * @return 引数のユーザがフォローしていたらtrue、していなかったらfalse
      */
-    public boolean checkFollowed(String targetName) {
+    public boolean checkFollowed(String screenName, String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
 
@@ -149,7 +139,7 @@ public class TwitterService {
      * @param targetName リツイートしているかチェックするユーザ
      * @return 引数のユーザがリツイートしていたらtrue、していなかったらfalse
      */
-    public boolean checkRetweet(String targetName) {
+    public boolean checkRetweet(long tweetId, String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
 
@@ -213,7 +203,11 @@ public class TwitterService {
         Objects.requireNonNull(twitter);
 
         try {
-            OEmbedRequest request = new OEmbedRequest(0, String.format("https://twitter.com/%s/status/%d", screenName, statusId));
+            OEmbedRequest request = new OEmbedRequest(statusId, String.format("https://twitter.com/%s/status/%d", screenName, statusId));
+            request.setHideThread(true);
+            request.setMaxWidth(1000);
+            request.setHideMedia(false);
+            logger.debug("[EmbedHTML] request:{}", request);
             OEmbed embed = twitter.tweets().getOEmbed(request);
             return embed.getHtml();
         }
