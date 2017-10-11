@@ -24,7 +24,7 @@ twitter.tweetId | このツイートをリツイートしているかのチェ�
 - [x] リクエスト毎にTwitterのコネクションの有無をチェックする
 - [x] TwitterのコネクションがなければTwitterのログイン画面に遷移する
 - [x] Twitterから戻ってきたら元のURLに遷移する
-- [ ] layout.htlml対応
+- [ ] layout.html対応
 - [ ] cssをBootstrapから変更
 - [ ] Mobile対応
 
