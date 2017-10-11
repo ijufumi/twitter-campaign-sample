@@ -66,7 +66,7 @@ public class CampaignController extends ControllerBase {
 
         model.addAttribute("campaign", campaign);
         model.addAttribute("embedHtml", twitterService.getEmbedHTML(campaign.getScreenName(), campaign.getStatusId()));
-        return "campaign";
+        return "campaign_detail";
     }
 
     /**
@@ -175,6 +175,6 @@ public class CampaignController extends ControllerBase {
 
         model.addAttribute("prizeStatus", campaignResultOpt.get().getPrizeStatus().getValue());
 
-        return "rampaign_result";
+        return "campaign_result";
     }
 }
