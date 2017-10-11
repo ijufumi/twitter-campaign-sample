@@ -110,7 +110,7 @@ public class CampaignController extends ControllerBase {
     ) {
         Optional<TCampaign> campaignOpt = campaignService.getCampaign(campaignKey);
         if (!campaignOpt.isPresent()) {
-            return "error";
+            return "redirect:/campaign/" + campaignKey;
         }
 
         model.addAttribute("emailAddress", twitterService.getEmailAddress());
@@ -135,7 +135,7 @@ public class CampaignController extends ControllerBase {
 
         Optional<TCampaign> campaignOpt = campaignService.getCampaign(campaignKey);
         if (!campaignOpt.isPresent()) {
-            return "error";
+            return "redirect:/campaign/" + campaignKey;
         }
         // バリデーションエラーがある場合
         if (result.hasErrors()) {
@@ -160,7 +160,7 @@ public class CampaignController extends ControllerBase {
     public String result(Model model, @PathVariable("campaignKey") String campaignKey) {
         Optional<TCampaign> campaignOpt = campaignService.getCampaign(campaignKey);
         if (!campaignOpt.isPresent()) {
-            return "error";
+            return "redirect:/campaign/" + campaignKey;
         }
 
         TCampaign campaign = campaignOpt.get();
