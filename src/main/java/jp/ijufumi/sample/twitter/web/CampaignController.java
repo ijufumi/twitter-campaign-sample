@@ -40,7 +40,7 @@ public class CampaignController extends ControllerBase {
     public String index(Model model, @PathVariable("campaignKey") String campaignKey) {
         Optional<TCampaign> campaignOpt = campaignService.getCampaign(campaignKey);
         if (!campaignOpt.isPresent()) {
-            return "error";
+            return "redirect:/";
         }
 
         TCampaign campaign = campaignOpt.get();
@@ -66,6 +66,7 @@ public class CampaignController extends ControllerBase {
 
         model.addAttribute("campaign", campaign);
         model.addAttribute("embedHtml", twitterService.getEmbedHTML(campaign.getScreenName(), campaign.getStatusId()));
+
         return "campaign_detail";
     }
 
@@ -115,6 +116,26 @@ public class CampaignController extends ControllerBase {
 
         model.addAttribute("emailAddress", twitterService.getEmailAddress());
 
+        TCampaign campaign = campaignOpt.get();
+
+        long twitterId = twitterService.getTweetId();
+        Optional<TCampaignResult> campaignResultOpt = campaignService.getResult(campaign.getCampaignId(), twitterId);
+
+        // 結果がある人は結果画面へ遷移
+        if (campaignResultOpt.isPresent()) {
+            TCampaignResult campaignResult = campaignResultOpt.get();
+            PrizeStatusObject prizeStatus = campaignResult.getPrizeStatus();
+
+            if (PrizeStatusObject.WIN.equals(prizeStatus)) {
+                // 当選かつメールアドレス未入力の場合は入力画面へ
+                if (StringUtils.isEmpty(campaignResult.getEmailAddress())) {
+                    return "redirect:/campaign/" + campaignKey + "/form";
+                }
+            }
+
+            return "redirect:/campaign/" + campaignKey + "/result";
+        }
+
         return "campaign_form";
     }
 
@@ -143,7 +164,26 @@ public class CampaignController extends ControllerBase {
             return "campaign_form";
         }
 
+        TCampaign campaign = campaignOpt.get();
+
         long twitterId = twitterService.getTweetId();
+        Optional<TCampaignResult> campaignResultOpt = campaignService.getResult(campaign.getCampaignId(), twitterId);
+
+        // 結果がある人は結果画面へ遷移
+        if (campaignResultOpt.isPresent()) {
+            TCampaignResult campaignResult = campaignResultOpt.get();
+            PrizeStatusObject prizeStatus = campaignResult.getPrizeStatus();
+
+            if (PrizeStatusObject.WIN.equals(prizeStatus)) {
+                // 当選かつメールアドレス未入力の場合は入力画面へ
+                if (StringUtils.isEmpty(campaignResult.getEmailAddress())) {
+                    return "redirect:/campaign/" + campaignKey + "/form";
+                }
+            }
+
+            return "redirect:/campaign/" + campaignKey + "/result";
+        }
+
         campaignService.updateEmailAddress(campaignOpt.get().getCampaignId(), twitterId, registerInfo.getEmailAddress());
 
         return "redirect:/campaign/" + campaignKey + "/result";
@@ -171,6 +211,16 @@ public class CampaignController extends ControllerBase {
         // 結果がない人はキャンペーントップへ遷移
         if (!campaignResultOpt.isPresent()) {
             return "redirect:/campaign/" + campaignKey;
+        }
+
+        TCampaignResult campaignResult = campaignResultOpt.get();
+        PrizeStatusObject prizeStatus = campaignResult.getPrizeStatus();
+
+        if (PrizeStatusObject.WIN.equals(prizeStatus)) {
+            // 当選かつメールアドレス未入力の場合は入力画面へ
+            if (StringUtils.isEmpty(campaignResult.getEmailAddress())) {
+                return "redirect:/campaign/" + campaignKey + "/form";
+            }
         }
 
         model.addAttribute("prizeStatus", campaignResultOpt.get().getPrizeStatus().getValue());
