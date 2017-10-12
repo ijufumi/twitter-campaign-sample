@@ -224,6 +224,7 @@ public class CampaignController extends ControllerBase {
         }
 
         model.addAttribute("prizeStatus", campaignResultOpt.get().getPrizeStatus().getValue());
+        model.addAttribute("campaignKey", campaignKey);
 
         return "campaign_result";
     }

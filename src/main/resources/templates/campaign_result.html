@@ -17,7 +17,24 @@
 <div class="form-group">
     <div class="row">
         <div class="col-md-offset-1 col-md-8">
-            ここに結果を記述する
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    抽選結果
+                </div>
+                <div class="panel-body">
+                    <th:block th:if="${prizeStatus}==1">当選しました。</th:block>
+                    <th:block th:if="${prizeStatus}==2">落選しました。</th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-1 col-md-8">
+            <div class="text-center">
+                <a class="btn btn-lg btn-primary" th:href="@{/campaign/} + ${campaignKey}}">
+                    キャンペーントップへ
+                </a>
+            </div>
         </div>
     </div>
 </div>
