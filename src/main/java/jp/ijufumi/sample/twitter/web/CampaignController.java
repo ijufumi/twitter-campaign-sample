@@ -136,6 +136,8 @@ public class CampaignController extends ControllerBase {
             return "redirect:/campaign/" + campaignKey + "/result";
         }
 
+        model.addAttribute("campaignKey", campaignKey);
+
         return "campaign_form";
     }
 
