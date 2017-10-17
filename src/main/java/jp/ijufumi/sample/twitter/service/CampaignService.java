@@ -56,10 +56,8 @@ public class CampaignService {
         PrizeStatusObject prizeStatus = CampaignUtil.drawLots(campaign.getWinningRate(), campaign.getWinningCount(), campaign.getTotalCount());
 
         int winningCount = campaign.getWinningCount();
-        String accessKey = "";
         if (PrizeStatusObject.WIN.equals(prizeStatus)) {
             winningCount++;
-            accessKey = CampaignUtil.generateAccessKey();
         }
 
         TCampaign newCampaign = campaign.copyOf(winningCount, campaign.getTotalCount() + 1, LocalDateTime.now());

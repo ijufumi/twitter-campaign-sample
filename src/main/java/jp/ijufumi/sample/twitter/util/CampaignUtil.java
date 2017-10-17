@@ -1,15 +1,13 @@
 package jp.ijufumi.sample.twitter.util;
 
+import jp.ijufumi.sample.twitter.domain.entity.TCampaign;
 import jp.ijufumi.sample.twitter.domain.value.PrizeStatusObject;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 
 public class CampaignUtil {
-    private static final String ACCESS_KEY_VALUES = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static final int ACCESS_KEY_LENGTH = 10;
-
     /**
      * 抽選を行う。
      * 今までのトータルカウントと当選数にそれぞれ1を足したもので当選率を計算し、
@@ -32,12 +30,20 @@ public class CampaignUtil {
         return PrizeStatusObject.LOSE;
     }
 
-    /**
-     * アクセスキーを生成する。
-     *
-     * @return アクセスキー
-     */
-    public static String generateAccessKey() {
-        return RandomStringUtils.random(ACCESS_KEY_LENGTH, ACCESS_KEY_VALUES);
+    public static boolean validCampaign(TCampaign campaign) {
+        return validCampaign(campaign, LocalDateTime.now());
+    }
+
+    public static boolean validCampaign(TCampaign campaign, LocalDateTime now) {
+        if (campaign == null) {
+            return false;
+        }
+
+        if (campaign.getValidStartDate().isAfter(now) ||
+                campaign.getValidEndDate().isBefore(now)) {
+            return false;
+        }
+
+        return true;
     }
 }

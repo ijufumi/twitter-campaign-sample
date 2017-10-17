@@ -22,8 +22,14 @@
                     抽選結果
                 </div>
                 <div class="panel-body">
-                    <th:block th:if="${prizeStatus}==1">当選しました。</th:block>
-                    <th:block th:if="${prizeStatus}==2">落選しました。</th:block>
+                    <th:block th:if="${prizeStatus}==1">
+                        当選しました。<br/>
+                        結果は後ほどご連絡致しますので少々お待ちください。
+                    </th:block>
+                    <th:block th:if="${prizeStatus}==2">
+                        落選しました。<br/>
+                        またの参加をお待ちしております。
+                    </th:block>
                 </div>
             </div>
         </div>

@@ -17,8 +17,24 @@
 <div class="form-group">
     <div class="row">
         <div class="col-md-offset-1 col-md-8">
-            <form method="post" th:action="@{/campaign/} + ${campaignKey} + '/register'"
-            ここにフォームを記述する
+            <form method="post" th:action="@{/campaign/} + ${campaignKey} + '/register'" id="registerForm">
+                <div class="col-md-2">
+                    <label>メールアドレス</label>
+                </div>
+                <div class="col-md-8">
+                    <input type="email" name="" value="" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-offset-2 col-md-8">
+            <div class="text-left">
+                <button type="button" class="btn btn-primary">
+                     登録する
+                </button>
+            </div>
         </div>
     </div>
 </div>
