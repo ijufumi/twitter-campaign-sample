@@ -14,21 +14,21 @@ import javax.sql.DataSource;
 @Data
 public class Datasource {
 
-    String username;
+    String username = "root";
 
-    String password;
+    String password = "password";
 
-    String jdbcUrl;
+    String jdbcUrl = "jdbc:mysql://localhost/campaign";
 
-    String driverClassName;
+    String driverClassName = "com.mysql.cj.jdbc.Driver";
 
-    long connectionTimeout;
+    long connectionTimeout = 1000;
 
-    int poolSize;
+    int poolSize = 10;
 
-    int minIdle;
+    int minIdle = 1;
 
-    String testQuery;
+    String testQuery = "SELECT 1";
 
     @Bean
     public DataSource dataSource(HikariConfig hikariConfig) {
