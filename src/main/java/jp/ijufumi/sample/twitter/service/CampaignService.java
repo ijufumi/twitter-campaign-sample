@@ -32,6 +32,7 @@ public class CampaignService {
 
     /**
      * キャンペーンのリストを取得する
+     *
      * @return
      */
     public List<TCampaign> getCampaignList() {
@@ -63,14 +64,15 @@ public class CampaignService {
         TCampaign newCampaign = campaign.copyOf(winningCount, campaign.getTotalCount() + 1, LocalDateTime.now());
         campaignDao.update(newCampaign);
 
-        TCampaignResult campaignResult = TCampaignResult.builder()
-                .resultId(-1L)
-                .campaignId(campaignId)
-                .twitterId(twitterId)
-                .prizeStatus(prizeStatus)
-                .emailAddress("")
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now()).build();
+        TCampaignResult campaignResult = new TCampaignResult(
+                -1,
+                campaignId,
+                twitterId,
+                prizeStatus,
+                "",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
 
         campaignResultDao.insert(campaignResult);
 

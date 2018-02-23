@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 @Domain(valueType = int.class, factoryMethod = "of")
 public enum PrizeStatusObject {
+    NONE(0),
     WIN(1),
     LOSE(2);
 

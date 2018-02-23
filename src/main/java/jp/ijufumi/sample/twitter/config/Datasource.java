@@ -2,7 +2,6 @@ package jp.ijufumi.sample.twitter.config;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,24 +10,87 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConfigurationProperties(prefix = "database.connection")
-@Data
 public class Datasource {
 
-    String username = "root";
+    private String username = "root";
 
-    String password = "password";
+    private String password = "password";
 
-    String jdbcUrl = "jdbc:mysql://localhost/campaign";
+    private String jdbcUrl = "jdbc:mysql://localhost/campaign";
 
-    String driverClassName = "com.mysql.cj.jdbc.Driver";
+    private String driverClassName = "com.mysql.cj.jdbc.Driver";
 
-    long connectionTimeout = 1000;
+    private long connectionTimeout = 1000;
 
-    int poolSize = 10;
+    private int poolSize = 10;
 
-    int minIdle = 1;
+    private int minIdle = 1;
 
-    String testQuery = "SELECT 1";
+    private String testQuery = "SELECT 1";
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getJdbcUrl() {
+        return jdbcUrl;
+    }
+
+    public void setJdbcUrl(String jdbcUrl) {
+        this.jdbcUrl = jdbcUrl;
+    }
+
+    public String getDriverClassName() {
+        return driverClassName;
+    }
+
+    public void setDriverClassName(String driverClassName) {
+        this.driverClassName = driverClassName;
+    }
+
+    public long getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(long connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    public int getPoolSize() {
+        return poolSize;
+    }
+
+    public void setPoolSize(int poolSize) {
+        this.poolSize = poolSize;
+    }
+
+    public int getMinIdle() {
+        return minIdle;
+    }
+
+    public void setMinIdle(int minIdle) {
+        this.minIdle = minIdle;
+    }
+
+    public String getTestQuery() {
+        return testQuery;
+    }
+
+    public void setTestQuery(String testQuery) {
+        this.testQuery = testQuery;
+    }
 
     @Bean
     public DataSource dataSource(HikariConfig hikariConfig) {
