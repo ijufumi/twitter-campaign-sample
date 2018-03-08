@@ -11,11 +11,15 @@
         <appender-ref ref="CONSOLE" />
     </logger>
 
-    <logger name="org.seasar.doma" level="DEBUG" additivity="false">
+    <logger name="org.seasar.doma" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE" />
     </logger>
 
-    <root level="DEBUG">
+    <logger name="com.zaxxer.hikari" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
 </configuration>
