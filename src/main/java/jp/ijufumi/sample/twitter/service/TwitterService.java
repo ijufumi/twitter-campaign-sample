@@ -5,20 +5,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.boot.autoconfigure.social.TwitterProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import twitter4j.Paging;
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
+import twitter4j.*;
+import twitter4j.api.UsersResources;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.PropertyConfiguration;
 
@@ -40,29 +36,20 @@ public class TwitterService {
      * Spring Social Twitter用のコネクションリポジトリクラス
      */
     final ConnectionRepository connectionRepository;
-    /**
-     * フォローされているかをチェックするユーザのスクリーン名
-     */
-    final String screenName;
-    /**
-     * リツイートの有無をチェックするツイートのID
-     */
-    final long tweetId;
 
-    /** Logger */
+    /**
+     * Logger
+     */
     final Logger logger;
 
     @Autowired
-    public TwitterService(@Value("${spring.social.twitter.appId}") String appId,
-                          @Value("${spring.social.twitter.appSecret}") String secret,
-                          @Value("${twitter.screenName}") String screenName,
-                          @Value("${twitter.tweetId}") long tweetId,
+    public TwitterService(TwitterProperties twitterProperties,
                           Logger logger,
                           ConnectionRepository connectionRepository) {
 
         Properties properties = new Properties();
-        properties.put("oauth.consumerKey", appId);
-        properties.put("oauth.consumerSecret", secret);
+        properties.put("oauth.consumerKey", twitterProperties.getAppId());
+        properties.put("oauth.consumerSecret", twitterProperties.getAppSecret());
         PropertyConfiguration configuration = new PropertyConfiguration(properties);
 
         logger.info("TwitterConfiguration: {}", ToStringBuilder.reflectionToString(configuration, ToStringStyle.JSON_STYLE));
@@ -71,9 +58,36 @@ public class TwitterService {
         this.connectionRepository = connectionRepository;
 
         this.logger = logger;
+    }
 
-        this.screenName = screenName;
-        this.tweetId = tweetId;
+    /**
+     * TwitterのIDを取得する
+     *
+     * @return
+     */
+    public long getTweetId() {
+        try {
+            return twitter().getId();
+        }
+        catch (TwitterException e) {
+            throw new UncheckedTwitterException(e);
+        }
+    }
+
+    /**
+     * メールアドレスを取得する
+     *
+     * @return
+     */
+    public String getEmailAddress() {
+        Twitter twitter = twitter();
+        Objects.requireNonNull(twitter);
+        try {
+            return twitter().users().verifyCredentials().getEmail();
+        }
+        catch (TwitterException e) {
+            throw new UncheckedTwitterException(e);
+        }
     }
 
     /**
@@ -81,16 +95,18 @@ public class TwitterService {
      * フォローしているかをチェックする。<br>
      * <br>
      * <b>今回の実装では未使用。</b>
+     *
      * @param targetName フォローされているかをチェックするユーザ
      * @return 引数のユーザがフォローされていたらtrue、されていなかったらfalse
      */
-    public boolean checkFollowing(String targetName) {
+    public boolean checkFollowing(String screenName, String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
 
         try {
             return twitter.showFriendship(screenName, targetName).isSourceFollowingTarget();
-        } catch (TwitterException e) {
+        }
+        catch (TwitterException e) {
             throw new UncheckedTwitterException(e);
         }
     }
@@ -98,16 +114,18 @@ public class TwitterService {
     /**
      * 指定したスクリーン名のユーザが、プロパティで設定したスクリーン名のユーザに
      * フォローしているかをチェックする。<br>
+     *
      * @param targetName フォローしているかをチェックするユーザ
      * @return 引数のユーザがフォローしていたらtrue、していなかったらfalse
      */
-    public boolean checkFollowed(String targetName) {
+    public boolean checkFollowed(String screenName, String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
 
         try {
             return twitter.showFriendship(screenName, targetName).isSourceFollowedByTarget();
-        } catch (TwitterException e) {
+        }
+        catch (TwitterException e) {
             throw new UncheckedTwitterException(e);
         }
     }
@@ -121,13 +139,13 @@ public class TwitterService {
      * @param targetName リツイートしているかチェックするユーザ
      * @return 引数のユーザがリツイートしていたらtrue、していなかったらfalse
      */
-    public boolean checkRetweet(String targetName) {
+    public boolean checkRetweet(long tweetId, String targetName) {
         Twitter twitter = twitter();
         Objects.requireNonNull(twitter);
 
         try {
             long pageNation = 0;
-            for (int i=0;i < 5;i++) {
+            for (int i = 0; i < 5; i++) {
                 Paging paging = (pageNation > 1) ? new Paging(pageNation) : new Paging();
                 ResponseList<Status> responseList = twitter.timelines().getUserTimeline(targetName, paging);
                 if (CollectionUtils.isEmpty(responseList)) {
@@ -142,14 +160,16 @@ public class TwitterService {
                 pageNation = responseList.get(responseList.size() - 1).getId();
             }
 
-            return  false;
-        } catch (TwitterException e) {
+            return false;
+        }
+        catch (TwitterException e) {
             throw new UncheckedTwitterException(e);
         }
     }
 
     /**
      * Twitterへの接続が存在するかチェックする
+     *
      * @return
      */
     public boolean isConnected() {
@@ -167,7 +187,31 @@ public class TwitterService {
 
         try {
             return twitter.getScreenName();
-        } catch (TwitterException e) {
+        }
+        catch (TwitterException e) {
+            throw new UncheckedTwitterException(e);
+        }
+    }
+
+    /**
+     * キャンペーン画面に表示するための埋め込み用HTMLを取得する
+     *
+     * @return
+     */
+    public String getEmbedHTML(String screenName, long statusId) {
+        Twitter twitter = twitter();
+        Objects.requireNonNull(twitter);
+
+        try {
+            OEmbedRequest request = new OEmbedRequest(statusId, String.format("https://twitter.com/%s/status/%d", screenName, statusId));
+            request.setHideThread(true);
+            request.setMaxWidth(1000);
+            request.setHideMedia(false);
+            logger.debug("[EmbedHTML] request:{}", request);
+            OEmbed embed = twitter.tweets().getOEmbed(request);
+            return embed.getHtml();
+        }
+        catch (TwitterException e) {
             throw new UncheckedTwitterException(e);
         }
     }
@@ -177,7 +221,7 @@ public class TwitterService {
      *
      * @return Twitterインスタンス
      */
-    public Twitter twitter() {
+    private Twitter twitter() {
         // アクセストークンを取得するために、Twitterのコネクション情報を取得する
         Connection<org.springframework.social.twitter.api.Twitter> twitterConnection = connectionRepository.findPrimaryConnection(org.springframework.social.twitter.api.Twitter.class);
 
