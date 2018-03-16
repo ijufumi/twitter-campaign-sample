@@ -9,7 +9,7 @@ import org.seasar.doma.Id;
 import java.time.LocalDateTime;
 
 @Entity(immutable = true)
-public class TCampaignResult {
+public class TCampaignResult extends EntityCommon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private final long resultId;
