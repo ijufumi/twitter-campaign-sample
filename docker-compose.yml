@@ -8,4 +8,5 @@ mysql:
     - "3306:3306"
   environment:
     MYSQL_ROOT_PASSWORD: password
+    TZ: "Asia/Tokyo"
   container_name: campaign-db
