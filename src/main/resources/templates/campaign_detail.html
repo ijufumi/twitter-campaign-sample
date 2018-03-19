@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Twitterキャンペーンサンプル</title>
+    <title th:text="${campaign.campaignName}">Twitterキャンペーンサンプル</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
 <body>
 <div class="row">
     <div class="col-md-offset-1 col-md-8">
-        <div class="page-header"><h2>Twitterキャンペーンサンプル</h2></div>
+        <div class="page-header"><h2 th:text="${campaign.campaignName}">Twitterキャンペーンサンプル</h2></div>
     </div>
 </div>
 <div class="form-group">
@@ -37,11 +37,9 @@
     </div>
     <div class="row">
         <div class="col-md-offset-2 col-md-8">
-            <h3>
-                <button class="btn btn-lg btn-primary">
-                    <th:block th:text="${campaign.screenName}">cotoco_japan</th:block>をフォローする
-                </button>
-            </h3>
+            <h3><th:block th:text="${campaign.screenName}">cotoco_japan</th:block>をフォローしよう！</h3>
+            <a class="twitter-follow-button" data-show-count="false" data-size="large" th:href="'https://twitter.com/' + ${campaign.screenName}" href="https://twitter.com/TwitterDev">
+            </a>
         </div>
     </div>
 </div>
