@@ -1,6 +1,5 @@
 package jp.ijufumi.sample.twitter
 
-import jp.ijufumi.sample.twitter.config.Datasource
 import jp.ijufumi.sample.twitter.interceptor.TwitterConnectionInterceptor
 import jp.ijufumi.sample.twitter.service.CampaignService
 import jp.ijufumi.sample.twitter.service.TwitterService
@@ -11,14 +10,12 @@ import org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Scope
 import org.springframework.web.servlet.HandlerInterceptor
 import org.springframework.web.servlet.handler.MappedInterceptor
 
 
 @SpringBootApplication
-@Import(Datasource::class)
 open class Bootstrap {
     companion object {
         @JvmStatic
