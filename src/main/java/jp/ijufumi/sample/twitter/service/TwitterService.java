@@ -1,12 +1,13 @@
 package jp.ijufumi.sample.twitter.service;
 
+import jp.ijufumi.sample.twitter.config.TwitterProperties;
 import jp.ijufumi.sample.twitter.exception.UncheckedTwitterException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.boot.autoconfigure.social.TwitterProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Scope;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionData;
@@ -14,7 +15,6 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import twitter4j.*;
-import twitter4j.api.UsersResources;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.PropertyConfiguration;
 
@@ -26,6 +26,7 @@ import java.util.Properties;
  */
 @Service
 @Scope(BeanDefinition.SCOPE_SINGLETON)
+@EnableConfigurationProperties(TwitterProperties.class)
 public class TwitterService {
 
     /**
